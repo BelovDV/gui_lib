@@ -1,7 +1,7 @@
 project	= gui_lib
 project_tmp_dir	= tmp/data
 
-src_dir	= src/gui src/common src/test
+src_dir	= src/gui src/common src/example
 inc_dir	= ${src_dir}
 out_dir	= tmp/bin
 
