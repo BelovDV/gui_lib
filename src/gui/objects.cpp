@@ -4,7 +4,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 
-void gui::FillColor::draw(sf::RenderTarget& target) {
+void gui::graphic::FillColor::draw(sf::RenderTarget& target) {
 	drawer_.setPosition({ (float)position_.x, (float)position_.y });
 	drawer_.setSize({ (float)size_.x, (float)size_.y });
 	drawer_.setFillColor(fill_color_);
@@ -13,7 +13,7 @@ void gui::FillColor::draw(sf::RenderTarget& target) {
 	target.draw(drawer_);
 }
 
-void gui::FillTexture::draw(sf::RenderTarget& target) {
+void gui::graphic::FillTexture::draw(sf::RenderTarget& target) {
 	drawer_.setPosition({ (float)position_.x, (float)position_.y });
 	drawer_.setTextureRect(texture_rect_);
 	target.draw(drawer_);

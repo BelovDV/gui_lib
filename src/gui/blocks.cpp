@@ -1,6 +1,6 @@
 #include "blocks.hpp"
 
-void gui::SplitVert::draw(sf::RenderTarget& target) {
+void gui::logic::SplitVert::draw(sf::RenderTarget& target) {
 	Drawable::draw_(target);
 	Vector2i delta;
 	for (auto& next : descendants) {
@@ -10,7 +10,7 @@ void gui::SplitVert::draw(sf::RenderTarget& target) {
 	}
 }
 
-void gui::SplitVert::update(Vector2u size, Vector2i position, const void* data) {
+void gui::logic::SplitVert::update(Vector2u size, Vector2i position, const void* data) {
 	Drawable::update_(size, position, data);
 	Vector2i delta;
 	for (auto& next : descendants) {
@@ -32,7 +32,7 @@ void gui::SplitVert::update(Vector2u size, Vector2i position, const void* data) 
 	}
 }
 
-void gui::SplitHor::draw(sf::RenderTarget& target) {
+void gui::logic::SplitHor::draw(sf::RenderTarget& target) {
 	Drawable::draw_(target);
 	Vector2i delta;
 	for (auto& next : descendants) {
@@ -42,7 +42,7 @@ void gui::SplitHor::draw(sf::RenderTarget& target) {
 	}
 }
 
-void gui::SplitHor::update(Vector2u size, Vector2i position, const void* data) {
+void gui::logic::SplitHor::update(Vector2u size, Vector2i position, const void* data) {
 	Drawable::update_(size, position, data);
 	Vector2i delta;
 	for (auto& next : descendants) {
@@ -64,14 +64,14 @@ void gui::SplitHor::update(Vector2u size, Vector2i position, const void* data) {
 	}
 }
 
-void gui::Overlay::draw(sf::RenderTarget& target) {
+void gui::logic::Overlay::draw(sf::RenderTarget& target) {
 	Drawable::draw_(target);
 	for (auto& next : descendants) {
 		next.descendant->draw(target);
 	}
 }
 
-void gui::Overlay::update(Vector2u size, Vector2i position, const void* data) {
+void gui::logic::Overlay::update(Vector2u size, Vector2i position, const void* data) {
 	Drawable::update_(size, position, data);
 	for (auto& next : descendants)
 		next.descendant->update(size, position, data);

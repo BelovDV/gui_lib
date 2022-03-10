@@ -3,6 +3,9 @@
 #include <iostream>
 
 using namespace gui;
+using namespace gui::basic;
+using namespace gui::logic;
+using namespace gui::graphic;
 
 using sf::Color;
 

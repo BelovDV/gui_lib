@@ -38,7 +38,7 @@ private:
 	void generate_tree() {}
 private:
 	Settings& settings_;
-	std::unique_ptr<gui::Block> tree_;
+	std::unique_ptr<gui::logic::Block> tree_;
 	sf::RectangleShape drawer_rectangle_;
 	sf::Texture texture_menu_icons_;
 	sf::Sprite drawer_sprite_menu_icons_;
