@@ -17,45 +17,29 @@ Menu::Menu(Settings& settings) :
 		std::cout << settings.get_path_to_data() + "/menu.png\n";
 	drawer_sprite_menu_icons_.setScale(0.5, 0.5);
 
-	tree_ = create<SplitVert>(
-		create<FillColor>(drawer_rectangle_, Color(30, 30, 30)),
-		SplitVert::Holder{ SplitVert::Type::Absolute, 50, create<FillColor>(drawer_rectangle_, Color(10, 10, 10, 200)) },
-		SplitVert::Holder{ SplitVert::Type::Absolute, 50, create<Overlay>(nullptr,
-			Overlay::Holder{ create<FillColor>(drawer_rectangle_, Color(10, 20, 30, 100))},
-			Overlay::Holder{ create<Button>([](void*) {std::cout << "log\n";})}
-			) },
-		SplitVert::Holder{ SplitVert::Type::Absolute, 50, create<Highlighted>(
-			create<FillColor>(drawer_rectangle_, Color(10, 20, 30, 100)),
-			create<FillColor>(drawer_rectangle_, Color(100, 20, 30, 100))
-		) },
-		SplitVert::Holder{ SplitVert::Type::Absolute, 0, create<FillColor>(drawer_rectangle_, Color::Transparent, Color{200, 200, 200, 200}, 1) },
-		SplitVert::Holder{ SplitVert::Type::Absolute, 50, create<Overlay>(
-			nullptr,
-			Overlay::Holder{ create<FillColor>(drawer_rectangle_, Color(0, 0, 30, 100))},
-			Overlay::Holder{ create<FillTexture>(drawer_sprite_menu_icons_, sf::IntRect{0, 0, 100, 100})}
-			) },
-		SplitVert::Holder{ SplitVert::Type::Absolute, 50, create<SplitHor>(
-			nullptr,
-			SplitHor::Holder{SplitHor::Type::Absolute, 50, create<Highlighted>(
-				create<FillTexture>(drawer_sprite_menu_icons_, sf::IntRect{0, 0, 100, 100}),
-				create<FillTexture>(drawer_sprite_menu_icons_, sf::IntRect{0, 100, 100, 100})
-			) },
-			SplitHor::Holder{SplitHor::Type::Absolute, 50, create<Highlighted>(
-				create<FillTexture>(drawer_sprite_menu_icons_, sf::IntRect{0, 0, 100, 100}),
-				create<FillTexture>(drawer_sprite_menu_icons_, sf::IntRect{0, 100, 100, 100})
-			) },
-			SplitHor::Holder{SplitHor::Type::Absolute, 50, create<Highlighted>(
-				create<FillTexture>(drawer_sprite_menu_icons_, sf::IntRect{0, 0, 100, 100}),
-				create<FillTexture>(drawer_sprite_menu_icons_, sf::IntRect{0, 100, 100, 100})
-			) }
-			) },
-		SplitVert::Holder{ SplitVert::Type::Absolute, 50, create<Overlay>(
-			create<FillColor>(drawer_rectangle_, Color(30, 20, 30, 100)),
-			Overlay::Holder{ create<Highlighted>(
-				create<FillTexture>(drawer_sprite_menu_icons_, sf::IntRect{0, 0, 100, 100}),
-				create<FillTexture>(drawer_sprite_menu_icons_, sf::IntRect{0, 100, 100, 100})
-			)}
-			) }
+	FillTextureGenerator texture_menu(drawer_sprite_menu_icons_);
+	FillColorGenerator rectangle(drawer_rectangle_);
+	ButtonGenerator button;
+	auto icon_pos = [](int x, int y) { return sf::IntRect{ x * 100, y * 100, 100, 100 }; };
+
+	//
+	// as for my highlighting - all conceptual (not structure) blocks are highlighted with separate color
+	// of course, comments are should be
+	//
+	tree_ = split_vert(rectangle(Color(30, 30, 30)),
+		split_holder(50, rectangle(Color(10, 10, 10, 200))),
+		split_holder(50, overlay(rectangle(Color(10, 20, 30, 100)), button([](void*) {std::cout << "log\n";}))),
+		split_holder(50, hightlighted(rectangle(Color(10, 20, 30, 100)), rectangle(Color(100, 20, 30, 100)))),
+		split_holder(0, rectangle({}, Color{ 200, 200, 200, 200 }, 1)),
+		split_holder(50, overlay(rectangle(Color(0, 0, 30, 100)), texture_menu(icon_pos(1, 0)))),
+		split_holder(50, split_hor(nullptr,
+			split_holder(50, hightlighted(texture_menu(icon_pos(0, 0)), texture_menu(icon_pos(0, 1)))),
+			split_holder(50, hightlighted(texture_menu(icon_pos(0, 0)), texture_menu(icon_pos(0, 1)))),
+			split_holder(50, hightlighted(texture_menu(icon_pos(0, 0)), texture_menu(icon_pos(0, 1))))
+		)),
+		split_holder(50, overlay(rectangle(Color(30, 20, 30, 100)),
+			hightlighted(texture_menu(icon_pos(0, 0)), texture_menu(icon_pos(0, 1)))
+		))
 	);
 }
 

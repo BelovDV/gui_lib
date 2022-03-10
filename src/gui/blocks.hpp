@@ -202,5 +202,7 @@ namespace gui {
 			bool hightlighted{ false };
 		};
 
+		using Type = logic::details::split::Type;
+
 	}
 }
