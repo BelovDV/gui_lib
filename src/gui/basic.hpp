@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/System/Vector2.hpp>
+#include <SFML/Window/Event.hpp>
 
 namespace sf {
 	class RenderTarget;
@@ -35,13 +36,19 @@ namespace gui {
 			}
 
 			virtual void draw(sf::RenderTarget&) {}
-			virtual bool requires_event(const sf::Event&) { return true; }
+			virtual bool requires_event(const sf::Event& event) {
+				return event.type & event_mask_;
+			}
 			virtual void process_event(const sf::Event&, void* /*data*/) {}
 			virtual void update(Vector2u size, Vector2i position, const void* /*data*/ = nullptr) {
 				update_(size, position);
 			}
 
 		public:
+			unsigned event_mask_ =
+				sf::Event::EventType::MouseMoved |
+				sf::Event::EventType::MouseButtonPressed
+				;
 			Vector2u size_;
 			Vector2i position_;
 		};

@@ -5,6 +5,11 @@
 
 namespace gui {
 
+	using logic::BlockPtr;
+	using logic::details::split::Type;
+	using basic::Vector2i;
+	using basic::Vector2u;
+
 	template<class B, class... Args>
 	std::unique_ptr<B> create(Args&&... args) {
 		return std::make_unique<B>(std::forward<Args>(args)...);
@@ -30,37 +35,76 @@ namespace gui {
 			to_add.add(Holder{ std::move(head) });
 			add(to_add, std::move(tail)...);
 		}
+		template <class Block, class Head>
+		void add_block(Block& to_add, Head&& head) {
+			to_add.add(std::move(head));
+		}
+		template <class Block, class Head, class... Args>
+		void add_block(Block& to_add, Head&& head, Args&&... tail) {
+			to_add.add(std::move(head));
+			add_block(to_add, std::move(tail)...);
+		}
 	}
 
 	template <class... Args>
-	inline auto overlay(logic::BlockPtr&& background, Args&&... args) {
+	inline auto overlay(BlockPtr&& background, Args&&... args) {
 		auto result = std::make_unique<logic::Overlay>(std::move(background));
 		detail::add(*result, std::move(args)...);
 		return result;
 	}
 
-	inline auto split_holder(float v, logic::BlockPtr&& ptr,
+	inline auto split_holder(float v, BlockPtr&& ptr,
 		logic::details::split::Type t = logic::details::split::Type::Absolute)
 	{
 		return logic::details::split::Holder(t, v, std::move(ptr));
 	}
 
 	template <class... Args>
-	inline auto split_vert(logic::BlockPtr&& background, Args&&... args) {
+	inline auto split_vert(BlockPtr&& background, Args&&... args) {
 		auto result = std::make_unique<logic::SplitVert>(std::move(background));
 		detail::add(*result, std::move(args)...);
 		return result;
 	}
 
 	template <class... Args>
-	inline auto split_hor(logic::BlockPtr&& background, Args&&... args) {
+	inline auto split_hor(BlockPtr&& background, Args&&... args) {
 		auto result = std::make_unique<logic::SplitHor>(std::move(background));
 		detail::add(*result, std::move(args)...);
 		return result;
 	}
 
-	inline auto hightlighted(logic::BlockPtr&& off, logic::BlockPtr&& on) {
+	template <class... Args>
+	inline auto unfold_list(BlockPtr&& background, Args&&... args) {
+		auto result = std::make_unique<logic::UnfoldingList>(std::move(background));
+		detail::add(*result, std::move(args)...);
+		return result;
+	}
+
+	inline auto hightlighted(BlockPtr&& off, BlockPtr&& on) {
 		return create<logic::Highlighted>(std::move(off), std::move(on));
+	}
+
+	inline auto selector(basic::Block* const* block) {
+		return create<logic::Selector>(block);
+	}
+
+	inline auto padding(Vector2u offset, BlockPtr&& block) {
+		return create<logic::Padding>(offset, std::move(block));
+	}
+
+	inline auto center_vert(Vector2u size, BlockPtr&& block) {
+		return create<logic::CenterVert>(size, std::move(block));
+	}
+
+	inline auto box(Vector2u size, BlockPtr&& block) {
+		return create<logic::Box>(size, std::move(block));
+	}
+
+	template <class... Args>
+	inline auto tile(Vector2u tile_size, BlockPtr&& block, Args&&... args) {
+		auto result = create<logic::Tile>(tile_size);
+		detail::add_block(*result, std::move(block), std::move(args)...);
+		return result;
 	}
 
 	class FillColorGenerator {
@@ -94,12 +138,28 @@ namespace gui {
 		ButtonGenerator() {}
 
 	public:
-		auto operator()(void (*action_on_pressing)(void* additional_data)) {
-			return create<graphic::Button>(action_on_pressing);
+		auto operator()(std::function<void(void*)> action_on_pressing,
+			BlockPtr&& background)
+		{
+			return overlay(std::move(background),
+				create<graphic::Button>(std::move(action_on_pressing))
+			);
 		}
 
 	private:
 	};
 
+	class TextGenerator {
+	public:
+		TextGenerator(sf::Text& drawer) : drawer_(drawer) {}
+
+	public:
+		auto operator()(std::string&& text) {
+			return create<graphic::Text>(drawer_, std::move(text));
+		}
+
+	private:
+		sf::Text& drawer_;
+	};
 
 }

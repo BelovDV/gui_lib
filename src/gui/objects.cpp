@@ -3,6 +3,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 void gui::graphic::FillColor::draw(sf::RenderTarget& target) {
 	drawer_.setPosition({ (float)position_.x, (float)position_.y });
@@ -16,5 +17,11 @@ void gui::graphic::FillColor::draw(sf::RenderTarget& target) {
 void gui::graphic::FillTexture::draw(sf::RenderTarget& target) {
 	drawer_.setPosition({ (float)position_.x, (float)position_.y });
 	drawer_.setTextureRect(texture_rect_);
+	target.draw(drawer_);
+}
+
+void gui::graphic::Text::draw(sf::RenderTarget& target) {
+	drawer_.setPosition({ (float)position_.x, (float)position_.y });
+	drawer_.setString(text_);
 	target.draw(drawer_);
 }
