@@ -19,6 +19,8 @@ Directory `example` contains example - library used only in Menu class, other fi
 
 Screenshots from app (which logic is around 100-200 lines - how to count) are located in `screenshots`
 
+This library assumes that gui is once created and then does not changed
+
 ### Building
 
 Run `make build` to compile, `make run` to start
@@ -28,11 +30,6 @@ Options may be seen after `make help` command
 #### Dependencies
 
 [SFML](https://www.sfml-dev.org/): `apt-get install libsfml` (example for ubuntu)
-
-### Purpose
-
-It's personal educational project
-I was working on [game](https://github.com/BelovDV/game-logic.git), after several rewriting of gui for it I decided to make it as a separate project
 
 ### Plans
 

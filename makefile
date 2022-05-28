@@ -1,8 +1,8 @@
 project	= gui_lib
 project_tmp_dir	= tmp/data
 
-src_dir	= src/gui src/common src/example
-inc_dir	= ${src_dir}
+src_dir	= src/gui_impl src/example
+inc_dir	= src/gui_library/frame src/gui_library/common src/gui_library/functional src/gui_library/graphic src/gui_library/gui src/gui_library/system src/gui_impl
 out_dir	= tmp/bin
 
 cc	= clang++
@@ -11,7 +11,7 @@ build_dir	= tmp/build
 cc_flags	= -Wall -Wextra -std=c++17
 cc_env		= -DPATH_SAVING_DIRECTORY=\"${project_tmp_dir}\"
 ld_flags	= -lsfml-graphics -lsfml-window -lsfml-system
-cc_debug	= -Og -g
+cc_debug	= -Og -g -D MAKE_LOG
 cc_release	= -O2 -D NDEBUG
 out_bin_release	= ${out_dir}/${project}
 out_bin_debug	= ${out_dir}/${project}_debug
